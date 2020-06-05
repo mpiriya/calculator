@@ -1,3 +1,8 @@
+body {
+    display: flex;
+    justify-content: center;
+}
+
 .container {
     height: 900px;
     width: 500px;

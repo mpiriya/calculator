@@ -10,13 +10,13 @@
 
 - rounds to not overflow screen
 
+- decimal compatibility
+
 **Issues**
 
 - order of operation such as 1 + 3 * 2 should be 7, not 6
 
 - after equals, set val1 to the result, so that the result can be operated on
-
-- no decimal compatibility
 
 - probably a lot more :)
 

@@ -1,4 +1,6 @@
-let val1 = NaN, val2 = NaN, val3 = NaN;
+let vals = [0, 0, 0];
+let index = 0;
+
 let op1 = "", op2 = "";
 let disp;
 
@@ -39,53 +41,65 @@ function operate(operator, a, b) {
 }
 
 function display(num) {
-    disp = document.querySelector("input");
-    if(disp.value.length == 9 || (disp.value.length == 10 && disp.value.indexOf(".") != -1)) {
+    if(disp.value.length == 9 || (disp.value.length == 10 && disp.value.indexOf(".") != -1) || (disp.value.indexOf(".") != -1 && num == ".")) {
         return;
     }
-    if(disp.value == "0") {
-        disp.value = num.toString();
+    if(disp.value == "0" && num != ".") {
+        disp.value = num;
     } else {
-        disp.value += num.toString();
+        disp.value += num;
     }
 }
+
 
 function setupOperators() {
     const ops = document.querySelectorAll(".operator");
     for(let i = 0; i < ops.length; i++) {
         ops[i].addEventListener('click', () => {
-            op1 = ops[i].getAttribute("id");
-            if(isNaN(val1)) {
-                val1 = +(document.querySelector("input").value);
-                document.querySelector("input").value = "0";
+            if(op1 == "") {
+                op1 = ops[i].getAttribute("id");
+                if(vals[index] == 0) {
+                    vals[index++] = +(document.querySelector("input").value);
+                    document.querySelector("input").value = "0";
+                }
             }
         });
     }
 }
 
-
 window.onload = () => {
+    disp = document.querySelector("input");
+
     const numButtons = document.querySelectorAll(".number");
     for(let i = 0; i < numButtons.length; i++) {
         numButtons[i].addEventListener('click', () => {
-            display(+numButtons[i].getAttribute("id"));
+            display(numButtons[i].getAttribute("id"));
         });
     }
     document.querySelector("input").value = "0";
     const clear = document.querySelector("#clear");
     clear.addEventListener('click', () => {
         document.querySelector("input").value = "0";
-        val1 = NaN;
-        val2 = NaN;
-        operator = "";
+        vals = [0, 0, 0];
+        index = 0;
+        op1 = "", op2 = "";
     });
 
     setupOperators();
 
     document.querySelector("#equals").addEventListener('click', () => {
-        val2 = +disp.value;
+        vals[index] = +disp.value;
         disp.value = "";
-        display(operate(op1, val1, val2));
+        if(vals[index] != 0) {
+            display(operate(op1, vals[index - 1], vals[index]));
+        } else if(op1 != "") {
+            display(operate(op1, vals[index - 1], vals[index - 1]));
+        } else {
+            document.querySelector("input").value = "0";
+            vals = [0, 0, 0];
+            index = 0;
+            op1 = "", op2 = "";
+        }
     });
     
 }
