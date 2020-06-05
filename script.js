@@ -1,4 +1,6 @@
-let val1 = 0, val2 = 0, val3 = 0;
+let val1 = NaN, val2 = NaN, val3 = NaN;
+let op1 = "", op2 = "";
+let disp;
 
 function add(a, b) {
     return a + b;
@@ -11,7 +13,6 @@ function subtract(a, b) {
 function multiply(a, b) {
     return a * b;
 }
-
 
 // dividend / divisor
 function divide(dividend, divisor) {
@@ -38,7 +39,7 @@ function operate(operator, a, b) {
 }
 
 function display(num) {
-    const disp = document.querySelector("input");
+    disp = document.querySelector("input");
     if(disp.value.length == 9 || (disp.value.length == 10 && disp.value.indexOf(".") != -1)) {
         return;
     }
@@ -49,6 +50,18 @@ function display(num) {
     }
 }
 
+function setupOperators() {
+    const ops = document.querySelectorAll(".operator");
+    for(let i = 0; i < ops.length; i++) {
+        ops[i].addEventListener('click', () => {
+            op1 = ops[i].getAttribute("id");
+            if(isNaN(val1)) {
+                val1 = +(document.querySelector("input").value);
+                document.querySelector("input").value = "0";
+            }
+        });
+    }
+}
 
 
 window.onload = () => {
@@ -62,5 +75,17 @@ window.onload = () => {
     const clear = document.querySelector("#clear");
     clear.addEventListener('click', () => {
         document.querySelector("input").value = "0";
+        val1 = NaN;
+        val2 = NaN;
+        operator = "";
     });
+
+    setupOperators();
+
+    document.querySelector("#equals").addEventListener('click', () => {
+        val2 = +disp.value;
+        disp.value = "";
+        display(operate(op1, val1, val2));
+    });
+    
 }

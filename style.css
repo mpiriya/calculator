@@ -40,3 +40,11 @@ button {
     cursor: pointer;
     font-size: 90px;
 }
+
+.number:active {
+    background-color: rgb(205, 225, 255);
+}
+
+.operator:active {
+    background-color: rgb(255, 177, 177);
+}
