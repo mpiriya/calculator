@@ -56,15 +56,35 @@ function setupOperators() {
     const ops = document.querySelectorAll(".operator");
     for(let i = 0; i < ops.length; i++) {
         ops[i].addEventListener('click', () => {
-            if(op1 == "") {
-                op1 = ops[i].getAttribute("id");
-                if(vals[index] == 0) {
-                    vals[index++] = +(document.querySelector("input").value);
-                    document.querySelector("input").value = "0";
+            op1 == "" ? op1 = ops[i].getAttribute("id") : op2 = ops[i].getAttribute("id");
+            if(vals[index] == 0) {
+                vals[index++] = +(document.querySelector("input").value);
+                document.querySelector("input").value = "0";
+            }
+            if(index == 2 && op2 != "") {
+                if(op2 == "multiply" || op2 == "divide") {
+                   index = 1;
+                   vals = [vals[0], operate(op2, vals[index], vals[index + 1]), 0];
+                   op2 = "";
+                } else {
+                    index = 1;
+                    vals = [operate(op1, vals[0], vals[index]), vals[index + 1], 0];
+                    op1 = op2;
                 }
             }
         });
     }
+
+    // const opKeys = ["*", "-", "+", "/"]
+
+    // document.addEventListener('keydown', event => {
+    //    if(opKeys.indexOf(event.key) != -1) {
+    //        switch(event.key) {
+    //             case opKeys[0]:
+
+    //        }
+    //    }
+    // });
 }
 
 window.onload = () => {
@@ -76,6 +96,14 @@ window.onload = () => {
             display(numButtons[i].getAttribute("id"));
         });
     }
+
+    document.addEventListener('keydown', event => {
+        if(!isNaN(+event.key) && (+event.key >= 0 && +event.key <= 9)) {
+            display(event.key);
+        }
+    });
+
+
     document.querySelector("input").value = "0";
     const clear = document.querySelector("#clear");
     clear.addEventListener('click', () => {
@@ -90,16 +118,39 @@ window.onload = () => {
     document.querySelector("#equals").addEventListener('click', () => {
         vals[index] = +disp.value;
         disp.value = "";
-        if(vals[index] != 0) {
-            display(operate(op1, vals[index - 1], vals[index]));
-        } else if(op1 != "") {
-            display(operate(op1, vals[index - 1], vals[index - 1]));
-        } else {
-            document.querySelector("input").value = "0";
-            vals = [0, 0, 0];
-            index = 0;
-            op1 = "", op2 = "";
+        // for basic a + b = c and then c + d = e, and so forth
+        display(operate(op1, vals[index - 1], vals[index]));
+        vals = [+disp.value, 0, 0];
+        index = 1;
+        op1 = "";
+        // if(vals[index] != 0) {
+        //     display(operate(op1, vals[index - 1], vals[index]));
+        // } else if(op1 != "") {
+        //     display(operate(op1, vals[index - 1], vals[index - 1]));
+        // } else {
+        //     document.querySelector("input").value = "0";
+        //     vals = [0, 0, 0];
+        //     index = 0;
+        //     op1 = "", op2 = "";
+        // }
+        console.log(vals);
+        console.log(op1 + " " + op2);
+    });
+
+    document.querySelector("#backspace").addEventListener('click', backspace);
+
+    document.addEventListener('keydown', event => {
+        if(event.key == "Backspace") {
+            backspace();
         }
     });
+
+    function backspace() {
+        if(disp.value.length == 1) {
+            disp.value = "0";
+        } else {
+            disp.value = disp.value.substring(0, disp.value.length - 1);
+        }
+    }
     
 }

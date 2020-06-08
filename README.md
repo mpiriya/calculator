@@ -12,18 +12,18 @@
 
 - decimal compatibility
 
+- backspace
+
+- chain of operations (does not follow order of operations YET)
+
+- keyboard support only for nums
+
 **Issues**
 
 - order of operation such as 1 + 3 * 2 should be 7, not 6
 
-- after equals, set val1 to the result, so that the result can be operated on
-
-- probably a lot more :)
-
 **To Add**
-
-- backspace button
 
 - make it look nice
 
-- keyboard support
+- keyboard support for operators, equals
